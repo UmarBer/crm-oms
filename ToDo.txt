@@ -1,0 +1,100 @@
+Here’s what you need to implement to create a **decent MVP** for your **CRM-OMS** SaaS:
+
+---
+
+### **Core Features for a Minimum Viable Product (MVP)**
+
+#### **1. Order Management System (OMS)**
+- ✅ **Order Creation:** Implemented.
+- ✅ **Order List:** Display orders in a table.
+- ✅ **Delete Orders:** Allow orders to be deleted from the UI and backend.
+- ✅ **Customer-Specific Orders:**
+  - **Backend:** Implement `GET /api/orders?customerId=...` to fetch orders for a specific customer.
+  - **Frontend:** Link customer details to display their orders.
+- ❌ **Order Status Updates:**
+  - Allow updating the status of orders (e.g., Pending, In Production, Completed).
+  - Add filtering by order status in the order dashboard.
+
+---
+
+#### **2. Customer Relationship Management (CRM)**
+- ✅ **Customer Creation & Editing:** Add and edit customer details (name, email, phone, etc.).
+- ✅ **Search Customers:** Search customers by name, email, or phone.
+- ❌ **Customer Segmentation:**
+  - Add tags to customers (e.g., "VIP," "Wholesale").
+  - Filter customers by tags in the dashboard.
+- ❌ **Customer Analytics:**
+  - Display basic metrics (e.g., total customers, number of customers with specific tags).
+  - Add insights like "Most Ordered Product" or "Most Active Customer."
+
+---
+
+#### **3. WhatsApp Business API Integration**
+- ✅ **Basic Messaging:** Send free-form WhatsApp messages to customers from the `CustomerDetails` page.
+- ❌ **Message Templates:**
+  - Add a feature to create, edit, and delete WhatsApp message templates.
+  - Save templates for reuse (e.g., "Thank You" messages, order updates).
+- ❌ **Batch Messaging:**
+  - Allow sending WhatsApp messages to multiple customers based on filters (e.g., tags like "Wholesale").
+
+---
+
+#### **4. Google Sheets Integration**
+- ✅ **Basic Export:** Export orders to a Google Sheet.
+- ❌ **Dynamic Export Options:**
+  - Add filters for date ranges and customer-specific exports.
+  - Allow users to customize exported columns.
+- ❌ **Automated Weekly Email:**
+  - Automate sending production sheets via email weekly instead of requiring manual generation.
+
+---
+
+#### **5. User Experience Enhancements**
+- ✅ **Basic Navigation:** Implemented.
+- ❌ **Mobile Responsiveness:**
+  - Ensure the CRM and OMS dashboards work smoothly on mobile devices.
+- ❌ **Improved UI/UX:**
+  - Add placeholders for empty states (e.g., "No orders available").
+  - Add loading spinners or skeleton loaders for API calls.
+  - Highlight active navigation items for better orientation.
+- ❌ **Error Handling:**
+  - Show user-friendly error messages for failed API calls or validation errors.
+
+---
+
+#### **6. Deployment**
+- ❌ **Fix `.env` Issue:** Ensure environment variables load correctly for deployment.
+- ❌ **Deploy Backend:**
+  - Deploy the backend to Render, AWS, or Heroku.
+- ❌ **Deploy Frontend:**
+  - Deploy the frontend to Netlify or Vercel.
+- ❌ **Testing in Production:**
+  - Thoroughly test the live app for bugs, performance, and scalability.
+
+---
+
+### **Prioritized Roadmap for the MVP**
+
+1. **Finish Customer and Order Integration:**
+   - Implement customer-specific orders (`GET /api/orders?customerId=...`).
+   - Allow filtering orders by status.
+
+2. **Polish CRM Features:**
+   - Add tag-based customer segmentation.
+   - Implement a tag-based filter in the CustomerDashboard.
+
+3. **Enhance WhatsApp Integration:**
+   - Add message templates.
+   - Prepare for batch messaging by filtering customers.
+
+4. **Finalize Export Options:**
+   - Add date and customer-specific filters for Google Sheets exports.
+   - Automate weekly email with the production sheet.
+
+5. **Deploy the Application:**
+   - Fix `.env` issue and deploy both frontend and backend.
+
+---
+
+### **What to Start Today?**
+Let me know which feature or task you'd like to focus on, and I’ll guide you through it step by step! 🚀

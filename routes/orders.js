@@ -87,7 +87,7 @@ router.get('/generate-sheet', async (req, res) => {
 // Unified Route: GET /api/orders?status=...&customerId=...
 router.get('/', async (req, res) => {
   const { status, customerId } = req.query; // Extract status and customerId from query
-  console.log('Received query parameters:', req.query);
+  // console.log('Received query parameters:', req.query);
 
   try {
     let filter = {}; // Start with an empty filter object
@@ -102,7 +102,7 @@ router.get('/', async (req, res) => {
       filter.status = status;
     }
 
-    console.log('Applying filter:', filter); // Log the filter being applied
+    // console.log('Applying filter:', filter); // Log the filter being applied
 
     // Query the database with the filter
     const orders = await Order.find(filter);

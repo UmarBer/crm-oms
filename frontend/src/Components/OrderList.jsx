@@ -144,16 +144,18 @@ function OrderList() {
                   </td>
                   <td className="border px-4 py-2">{order.status}</td>
                   <td className="border px-4 py-2 flex justify-around">
-                    {order.status !== 'Completed' && (
-                      <button
-                        className="px-2 mx-1 py-1 bg-green-500 text-white rounded"
-                        onClick={() =>
-                          handleStatusChange(order._id, 'Completed')
-                        }
-                      >
-                        Mark as Completed
-                      </button>
-                    )}
+                    <select
+                      className="border px-2 py-1 rounded"
+                      value={order.status}
+                      onChange={(e) =>
+                        handleStatusChange(order._id, e.target.value)
+                      }
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="In Production">In Production</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+
                     <button
                       className="px-2  py-1 bg-red-500 text-white rounded"
                       onClick={() => handleDeleteOrder(order._id)}

@@ -35,7 +35,7 @@ function CustomerDetails() {
         const ordersData = await ordersResponse.json();
         setOrders(ordersData);
 
-        console.log('Fetched orders:', ordersData);
+        // console.log('Fetched orders:', ordersData);
       } catch (err) {
         console.error('Error fetching data:', err.message);
         setError(err.message);
@@ -56,7 +56,7 @@ function CustomerDetails() {
           : [updatedCustomer.tags] // Ensure tags is always an array
       };
 
-      console.log('Normalized customer data:', normalizedCustomer); // Debug log
+      // console.log('Normalized customer data:', normalizedCustomer); // Debug log
 
       const response = await fetch(`${API_BASE_URL}/api/customers/${id}`, {
         method: 'PUT',
@@ -69,7 +69,7 @@ function CustomerDetails() {
       }
 
       const updatedData = await response.json();
-      console.log('Backend response:', updatedData); // Debug log
+      // console.log('Backend response:', updatedData); // Debug log
       setCustomer(updatedData); // Update the state with the new customer details
       setIsEditing(false); // Exit editing mode
     } catch (error) {

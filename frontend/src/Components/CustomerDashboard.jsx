@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import CustomerList from './CustomerList';
 import CustomerForm from './CustomerForm';
+import CustomerAnalytics from './CustomerAnalytics';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
@@ -23,7 +24,7 @@ function CustomerDashboard() {
 
       const data = await response.json();
       setCustomers(data);
-      console.log('Updated customers state:', data);
+      // console.log('Updated customers state:', data);
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
@@ -106,6 +107,9 @@ function CustomerDashboard() {
         onEdit={setEditingCustomer}
         onDelete={handleDelete}
       />
+
+      {/* Customer Analytics */}
+      <CustomerAnalytics />
     </div>
   );
 }

@@ -1,26 +1,30 @@
 const express = require('express');
 const Customer = require('../models/Customer');
+const Order = require('../models/Order'); // Ensure this is imported
 
 const router = express.Router();
 
-// Create a new customer
-router.post('/', async (req, res) => {
-  const { name, email, phone, address, notes, tags } = req.body;
-
+// Analytics Routes
+router.get('/analytics/count', async (req, res) => {
   try {
-    const customer = new Customer({
-      name,
-      email,
-      phone,
-      address,
-      notes,
-      tags: tags || []
-    });
-    await customer.save();
-    res.status(201).json(customer);
+    const totalCustomers = await Customer.countDocuments();
+    res.json({ total: totalCustomers });
   } catch (error) {
-    console.error('Error creating customer:', error);
-    res.status(500).json({ message: 'Failed to create customer', error });
+    console.error('Error fetching customer count:', error);
+    res.status(500).json({ message: 'Failed to fetch customer count' });
+  }
+});
+
+router.get('/analytics/tags', async (req, res) => {
+  try {
+    const tagCounts = await Customer.aggregate([
+      { $unwind: '$tags' }, // Flatten the tags array
+      { $group: { _id: '$tags', count: { $sum: 1 } } } // Count customers per tag
+    ]);
+    res.json(tagCounts);
+  } catch (error) {
+    console.error('Error fetching customer tags:', error);
+    res.status(500).json({ message: 'Failed to fetch customer tags' });
   }
 });
 
@@ -31,31 +35,25 @@ router.get('/', async (req, res) => {
     let query = {};
 
     if (search) {
-      const searchRegex = new RegExp(search, 'i'); // Case-insensitive search
-      query = {
-        $or: [
-          { name: { $regex: searchRegex } },
-          { email: { $regex: searchRegex } },
-          { phone: { $regex: searchRegex } },
-          { tags: { $regex: searchRegex } }
-        ]
-      };
+      const searchRegex = new RegExp(search, 'i');
+      query.$or = [
+        { name: { $regex: searchRegex } },
+        { email: { $regex: searchRegex } },
+        { phone: { $regex: searchRegex } },
+        { tags: { $regex: searchRegex } }
+      ];
     }
 
     if (tags) {
-      const tagArray = tags.split(','); // Split comma-separated tags into an array
-      // If a $or query already exists, combine $or with $and
-      if (query.$or) {
-        query.$and = [{ tags: { $all: tagArray } }];
-      } else {
-        query.tags = { $all: tagArray }; // Match customers with all provided tags
-      }
+      const tagArray = tags.split(',');
+      query.tags = { $all: tagArray };
     }
 
     const customers = await Customer.find(query);
     res.json(customers);
   } catch (error) {
     console.error('Error fetching customers:', error);
+    res.status(500).json({ message: 'Failed to fetch customers' });
   }
 });
 
@@ -71,6 +69,7 @@ router.get('/:id', async (req, res) => {
     res.json(customer);
   } catch (error) {
     console.error('Error fetching customer:', error);
+    res.status(500).json({ message: 'Failed to fetch customer' });
   }
 });
 
@@ -88,9 +87,9 @@ router.put('/:id', async (req, res) => {
         phone,
         address,
         notes,
-        tags: tags || [] // Default to an empty array if no tags are provided
+        tags: tags || []
       },
-      { new: true } // Return the updated document
+      { new: true }
     );
 
     if (!updatedCustomer) {

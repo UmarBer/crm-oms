@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 function CustomerList({ customers, onEdit, onDelete }) {
-  console.log('Received customers:', customers); // Log received data
+  // console.log('Received customers:', customers); // Log received data
   return (
     <div className="bg-white p-6  rounded-lg shadow-lg">
       <h2 className="text-xl font-semibold mb-4">Customer List</h2>

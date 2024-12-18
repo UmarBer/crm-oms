@@ -159,6 +159,22 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Analytics Endpoimt
+// Most Ordered Product Analytics
+router.get('/analytics/most-ordered-product', async (req, res) => {
+  try {
+    const mostOrdered = await Order.aggregate([
+      { $group: { _id: '$productName', count: { $sum: '$quantity' } } },
+      { $sort: { count: -1 } },
+      { $limit: 1 }
+    ]);
+    res.json(mostOrdered[0] || { productName: 'No Data', count: 0 });
+  } catch (error) {
+    console.error('Error fetching most ordered product:', error);
+    res.status(500).json({ message: 'Failed to fetch most ordered product' });
+  }
+});
+
 router.get('/test', (req, res) => {
   console.log('GET /api/orders/test endpoint hit');
   res.status(200).json({ message: 'Test endpoint reached' });

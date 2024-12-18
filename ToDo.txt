@@ -11,7 +11,7 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 - ✅ **Customer-Specific Orders:**
   - **Backend:** Implement `GET /api/orders?customerId=...` to fetch orders for a specific customer.
   - **Frontend:** Link customer details to display their orders.
-- ❌ **Order Status Updates:**
+- ✅ **Order Status Updates:**
   - Allow updating the status of orders (e.g., Pending, In Production, Completed).
   - Add filtering by order status in the order dashboard.
 
@@ -20,7 +20,7 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 #### **2. Customer Relationship Management (CRM)**
 - ✅ **Customer Creation & Editing:** Add and edit customer details (name, email, phone, etc.).
 - ✅ **Search Customers:** Search customers by name, email, or phone.
-- ❌ **Customer Segmentation:**
+- ✅ **Customer Segmentation:**
   - Add tags to customers (e.g., "VIP," "Wholesale").
   - Filter customers by tags in the dashboard.
 - ❌ **Customer Analytics:**

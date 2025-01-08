@@ -5,9 +5,9 @@ const sendWhatsAppTemplate = async (
   templateName,
   languageCode = 'en_US'
 ) => {
-  const apiUrl = `https://graph.facebook.com/v15.0/<YOUR_PHONE_NUMBER_ID>/messages`;
-  const token = process.env.WHATSAPP_API_TOKEN;
-
+  const apiUrl = `https://graph.facebook.com/v21.0/${process.env.VITE_PHONE_NUMBER_ID}/messages`;
+  const token = process.env.VITE_WHATSAPP_API_TOKEN;
+  console.log(templateName);
   const payload = {
     messaging_product: 'whatsapp',
     to: phone,

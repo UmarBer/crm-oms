@@ -11,6 +11,7 @@ import OrderList from './Components/OrderList';
 import GenerateSheetButton from './Components/GenerateSheetButton';
 import CustomerDashboard from './Components/CustomerDashboard';
 import CustomerDetails from './Components/CustomerDetails';
+import TemplateManager from './Components/TemplateManager';
 
 function App() {
   return (
@@ -66,6 +67,16 @@ function App() {
           >
             View / Add Customers
           </NavLink>
+          <NavLink
+            to="/templates"
+            className={({ isActive }) =>
+              isActive
+                ? 'text-blue-700 font-bold border-b-2 border-blue-700'
+                : 'text-blue-500 hover:underline'
+            }
+          >
+            Manage WhatsApp Templates
+          </NavLink>
         </nav>
 
         {/* Routes */}
@@ -107,6 +118,14 @@ function App() {
             element={
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
                 <GenerateSheetButton />
+              </div>
+            }
+          />
+          <Route
+            path="/templates"
+            element={
+              <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
+                <TemplateManager />
               </div>
             }
           />

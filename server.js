@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const orderRoutes = require('./routes/orders');
 const customerRoutes = require('./routes/customers');
 const messageRoutes = require('./routes/messages');
+const templateRoutes = require('./routes/templates');
 require('dotenv').config();
 
 const app = express();
@@ -21,6 +22,7 @@ mongoose
 app.use('/api/orders', orderRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/templates', templateRoutes);
 
 const PORT = process.env.PORT || 3000;
 

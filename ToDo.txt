@@ -23,7 +23,7 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 - ✅ **Customer Segmentation:**
   - Add tags to customers (e.g., "VIP," "Wholesale").
   - Filter customers by tags in the dashboard.
-- ❌ **Customer Analytics:**
+- ✅ **Customer Analytics:**
   - Display basic metrics (e.g., total customers, number of customers with specific tags).
   - Add insights like "Most Ordered Product" or "Most Active Customer."
 
@@ -31,7 +31,7 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 
 #### **3. WhatsApp Business API Integration**
 - ✅ **Basic Messaging:** Send free-form WhatsApp messages to customers from the `CustomerDetails` page.
-- ❌ **Message Templates:**
+- ✅ **Message Templates:**
   - Add a feature to create, edit, and delete WhatsApp message templates.
   - Save templates for reuse (e.g., "Thank You" messages, order updates).
 - ❌ **Batch Messaging:**

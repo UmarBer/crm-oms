@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import CustomerForm from './CustomerForm';
 import MessageEditorModal from './MessageEditorModal';
+import axios from 'axios';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CustomerDetails() {
   const { id } = useParams(); // Get customer ID from the URL
@@ -56,8 +56,6 @@ function CustomerDetails() {
           : [updatedCustomer.tags] // Ensure tags is always an array
       };
 
-      // console.log('Normalized customer data:', normalizedCustomer); // Debug log
-
       const response = await fetch(`${API_BASE_URL}/api/customers/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -69,12 +67,28 @@ function CustomerDetails() {
       }
 
       const updatedData = await response.json();
-      // console.log('Backend response:', updatedData); // Debug log
       setCustomer(updatedData); // Update the state with the new customer details
       setIsEditing(false); // Exit editing mode
     } catch (error) {
       console.error('Error updating customer:', error);
       setError(error.message);
+    }
+  };
+
+  const sendFirstMessage = async () => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/messages/send-first-message`,
+        { phone: customer.phone }
+      );
+      if (response.status === 200) {
+        alert('First message sent successfully!');
+      } else {
+        alert('Failed to send first message');
+      }
+    } catch (error) {
+      console.error('Error sending first message:', error);
+      alert('An error occurred while sending the first message.');
     }
   };
 
@@ -172,6 +186,12 @@ function CustomerDetails() {
           </p>
 
           <div className="mt-4 flex gap-4">
+            <button
+              onClick={sendFirstMessage}
+              className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg"
+            >
+              Send First WhatsApp Message
+            </button>
             <button
               onClick={() => setIsModalOpen(true)}
               className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"

@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import CustomerList from './CustomerList';
 import CustomerForm from './CustomerForm';
 import CustomerAnalytics from './CustomerAnalytics';
+import BatchMessaging from './BatchMEssaging';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CustomerDashboard() {
   const [customers, setCustomers] = useState([]);
@@ -110,6 +110,9 @@ function CustomerDashboard() {
 
       {/* Customer Analytics */}
       <CustomerAnalytics />
+
+      {/* Batch Messaging */}
+      <BatchMessaging />
     </div>
   );
 }

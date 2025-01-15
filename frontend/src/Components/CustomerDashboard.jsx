@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import CustomerList from './CustomerList';
 import CustomerForm from './CustomerForm';
 import CustomerAnalytics from './CustomerAnalytics';
-import BatchMessaging from './BatchMEssaging';
+import BatchMessaging from './BatchMessaging';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

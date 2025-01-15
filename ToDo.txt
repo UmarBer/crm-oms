@@ -34,7 +34,7 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 - ✅ **Message Templates:**
   - Add a feature to create, edit, and delete WhatsApp message templates.
   - Save templates for reuse (e.g., "Thank You" messages, order updates).
-- ❌ **Batch Messaging:**
+- ✅ **Batch Messaging:**
   - Allow sending WhatsApp messages to multiple customers based on filters (e.g., tags like "Wholesale").
 
 ---

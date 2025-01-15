@@ -66,7 +66,7 @@ function BatchMessaging() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tags: selectedTags,
-          messageTemplate: selectedTemplate
+          messageTemplateId: selectedTemplate
         })
       });
 
@@ -138,7 +138,7 @@ function BatchMessaging() {
         >
           <option value="">Select Template</option>
           {templates.map((template) => (
-            <option key={template._id} value={template.metaTemplateName}>
+            <option key={template._id} value={template._id}>
               {template.name}
             </option>
           ))}

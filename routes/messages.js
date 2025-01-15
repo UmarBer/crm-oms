@@ -1,6 +1,7 @@
 const express = require('express');
 const { sendWhatsAppMessage } = require('../utils/sendWhatsAppMessage');
 const Customer = require('../models/Customer');
+const MessageTemplate = require('../models/MessageTemplate');
 const axios = require('axios');
 require('dotenv').config();
 
@@ -73,22 +74,27 @@ router.post('/send-first-message', async (req, res) => {
 });
 
 router.post('/batch', async (req, res) => {
-  const { tags, messageTemplate } = req.body;
+  const { tags, messageTemplateId } = req.body;
 
-  if (!tags || !messageTemplate) {
+  if (!tags || !messageTemplateId) {
     return res
       .status(400)
-      .json({ message: 'Tags and message template are required' });
+      .json({ message: 'Tags and message template ID are required' });
   }
 
   try {
     // Fetch customers matching the tags
     const customers = await Customer.find({ tags: { $in: tags } });
-
     if (customers.length === 0) {
       return res
         .status(404)
         .json({ message: 'No customers found with the specified tags' });
+    }
+
+    // Fetch the message template by ID
+    const messageTemplate = await MessageTemplate.findById(messageTemplateId);
+    if (!messageTemplate) {
+      return res.status(404).json({ message: 'Message template not found' });
     }
 
     const phoneNumberId = process.env.VITE_PHONE_NUMBER_ID;
@@ -102,10 +108,8 @@ router.post('/batch', async (req, res) => {
           {
             messaging_product: 'whatsapp',
             to: customer.phone,
-            type: 'template',
-            template: {
-              name: messageTemplate,
-              language: { code: 'en' }
+            text: {
+              body: messageTemplate.body
             }
           },
           {

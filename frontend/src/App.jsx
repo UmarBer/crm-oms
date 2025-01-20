@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import OrderForm from './Components/OrderForm';
 import OrderList from './Components/OrderList';
-import GenerateSheetButton from './Components/GenerateSheetButton';
+import GenerateSheetForm from './Components/GenerateSheetForm';
 import CustomerDashboard from './Components/CustomerDashboard';
 import CustomerDetails from './Components/CustomerDetails';
 import TemplateManager from './Components/TemplateManager';
@@ -117,7 +117,7 @@ function App() {
             path="/generate-sheet"
             element={
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
-                <GenerateSheetButton />
+                <GenerateSheetForm />
               </div>
             }
           />

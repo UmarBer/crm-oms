@@ -59,20 +59,21 @@ router.post('/', async (req, res) => {
 // Endpoint: GET /api/orders/generate-sheet
 // Description: Retrieves all orders from the database, appends them to the Google Sheet, and emails the sheet link.
 router.get('/generate-sheet', async (req, res) => {
+  const { startDate, endDate, email } = req.query;
+
   try {
-    console.log('Fetching orders from the database...');
-    const orders = await Order.find(); // Fetch all orders
-    console.log('Orders fetched:', orders);
+    const orders = await Order.find({
+      orderDate: {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate)
+      }
+    });
 
-    console.log('Updating Google Sheet...');
-    await updateGoogleSheet(orders); // Update Google Sheet with orders
-    console.log('Google Sheet updated successfully');
+    await updateGoogleSheet(orders, startDate, endDate); // Pass date range
 
-    console.log('Sending email...');
-    await sendEmailWithSheetLink('umar@mirocoffee.co'); // Send email with sheet link
-    console.log('Email sent successfully');
+    await sendEmailWithSheetLink(email); // Send email with provided email
 
-    res.send('Google Sheet updated and email sent');
+    res.json({ message: 'Google Sheet updated and email sent' });
   } catch (error) {
     console.error('Error in /generate-sheet:', error);
     res

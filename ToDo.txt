@@ -41,7 +41,7 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 
 #### **4. Google Sheets Integration**
 - ✅ **Basic Export:** Export orders to a Google Sheet.
-- ❌ **Dynamic Export Options:**
+- ✅ **Dynamic Export Options:**
   - Add filters for date ranges and customer-specific exports.
   - Allow users to customize exported columns.
 - ❌ **Automated Weekly Email:**

@@ -12,6 +12,7 @@ import GenerateSheetForm from './Components/GenerateSheetForm';
 import CustomerDashboard from './Components/CustomerDashboard';
 import CustomerDetails from './Components/CustomerDetails';
 import TemplateManager from './Components/TemplateManager';
+import LandingPage from './Components/LandingPage';
 
 function App() {
   return (
@@ -77,6 +78,16 @@ function App() {
           >
             Manage WhatsApp Templates
           </NavLink>
+          <NavLink
+            to="/landing"
+            className={({ isActive }) =>
+              isActive
+                ? 'text-blue-700 font-bold border-b-2 border-blue-700'
+                : 'text-blue-500 hover:underline'
+            }
+          >
+            Check out Landing
+          </NavLink>
         </nav>
 
         {/* Routes */}
@@ -126,6 +137,14 @@ function App() {
             element={
               <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto">
                 <TemplateManager />
+              </div>
+            }
+          />
+          <Route
+            path="/landing"
+            element={
+              <div className="bg-white p-6 rounded-lg shadow-lg  mx-auto">
+                <LandingPage />
               </div>
             }
           />

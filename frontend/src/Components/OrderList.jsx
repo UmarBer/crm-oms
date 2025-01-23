@@ -78,7 +78,7 @@ function OrderList() {
   }, [filter]);
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md mt-10">
+    <div className="p-6 bg-white rounded-lg shadow-md mt-10 max-w-screen-xl mx-auto">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">Order List</h2>
 
       <div className="mb-4 flex justify-between items-center">

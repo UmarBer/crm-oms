@@ -4,7 +4,7 @@ function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-white">
+    <div className="min-h-max bg-gradient-to-r from-blue-50 via-white">
       <main>
         {/* Hero Section */}
         <section className="text-center py-20 bg-white">

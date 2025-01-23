@@ -136,7 +136,7 @@ function TemplateManager() {
   };
 
   return (
-    <div className="bg-white p-6 rounded shadow">
+    <div className="bg-white p-6 rounded shadow max-w-screen-xl mx-auto">
       <h2 className="text-lg font-bold mb-4">Manage WhatsApp Templates</h2>
 
       <form onSubmit={handleSubmit} className="mb-4">

@@ -43,7 +43,7 @@ function GenerateSheetForm() {
     console.log(message);
   };
   return (
-    <div className="p-6 bg-white rounded shadow-md">
+    <div className="p-6 bg-white rounded shadow-md max-w-screen-xl mx-auto">
       <h2 className="text-xl font-bold mb-4">
         Generate Weekly Production Sheet
       </h2>

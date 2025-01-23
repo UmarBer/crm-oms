@@ -51,6 +51,7 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 
 #### **5. User Experience Enhancements**
 - ✅ **Basic Navigation:** Implemented.
+- ❌ Add login and register and hide content if not logged in
 - ❌ **Mobile Responsiveness:**
   - Ensure the CRM and OMS dashboards work smoothly on mobile devices.
 - ❌ **Improved UI/UX:**

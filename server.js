@@ -6,6 +6,8 @@ const orderRoutes = require('./routes/orders');
 const customerRoutes = require('./routes/customers');
 const messageRoutes = require('./routes/messages');
 const templateRoutes = require('./routes/templates');
+const authRoutes = require('./routes/authRoutes');
+
 require('dotenv').config();
 
 const app = express();
@@ -23,6 +25,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/templates', templateRoutes);
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 

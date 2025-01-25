@@ -4,10 +4,10 @@ function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-max bg-gradient-to-r from-blue-50 via-white">
-      <main>
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-blue-50 via-white to-blue-50">
+      <main className="flex-grow">
         {/* Hero Section */}
-        <section className="text-center py-20 bg-white">
+        <section className="text-center py-32 bg-white">
           <h2 className="text-4xl font-extrabold text-gray-800 mb-4">
             Revolutionize Your Wholesale Orders
           </h2>
@@ -24,7 +24,7 @@ function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 bg-gradient-to-b from-blue-50 to-white">
+        <section className="py-32 bg-gradient-to-b from-blue-50 to-white">
           <div className="container mx-auto px-6">
             <h3 className="text-3xl font-bold text-center text-gray-800 mb-8">
               Features
@@ -62,7 +62,7 @@ function LandingPage() {
         </section>
 
         {/* Call-to-Action Section */}
-        <section className="text-center py-20 bg-blue-600 text-white">
+        <section className="text-center py-32 bg-blue-600 text-white mb-0">
           <h3 className="text-3xl font-bold mb-4">
             Ready to Simplify Your Workflow?
           </h3>
@@ -77,9 +77,8 @@ function LandingPage() {
           </button>
         </section>
       </main>
-
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-6">
+      <footer className="bg-gray-800 text-white py-24 mt-0">
         <div className="container mx-auto px-6 text-center">
           <p>
             &copy; {new Date().getFullYear()} Miro OMS. All rights reserved.

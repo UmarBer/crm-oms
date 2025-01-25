@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Login from './Login';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ const Navbar = () => {
                 Get Started
               </button>
             </NavLink>
+            <Login />
           </div>
 
           {/* Mobile Menu Button */}
@@ -130,6 +132,7 @@ const Navbar = () => {
                 Get Started
               </button>
             </NavLink>
+            <Login />
           </div>
         </div>
       )}

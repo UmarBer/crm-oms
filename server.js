@@ -6,13 +6,18 @@ const orderRoutes = require('./routes/orders');
 const customerRoutes = require('./routes/customers');
 const messageRoutes = require('./routes/messages');
 const templateRoutes = require('./routes/templates');
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/auth');
 
 require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+app.use((req, res, next) => {
+  res.removeHeader('Cross-Origin-Opener-Policy');
+  res.removeHeader('Cross-Origin-Embedder-Policy');
+  next();
+});
 
 const mongoUri = process.env.MONGO_URI;
 

@@ -5,6 +5,7 @@ node_modules/
 .env
 .env.local
 credentials.json
+serviceAccountKey.json
 # Build outputs
 dist/
 out/

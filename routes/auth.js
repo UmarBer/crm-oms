@@ -1,6 +1,6 @@
 // backend/src/routes/authRoutes.js
 const express = require('express');
-const verifyFirebaseToken = require('../middlewares/authMiddleware');
+const verifyFirebaseToken = require('../middlewares/authMiddlewares');
 
 const router = express.Router();
 

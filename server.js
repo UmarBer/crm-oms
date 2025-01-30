@@ -6,7 +6,7 @@ const orderRoutes = require('./routes/orders');
 const customerRoutes = require('./routes/customers');
 const messageRoutes = require('./routes/messages');
 const templateRoutes = require('./routes/templates');
-import authRoutes from './routes/auth';
+const authRoutes = require('./routes/auth');
 
 require('dotenv').config();
 

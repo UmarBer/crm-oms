@@ -1,7 +1,7 @@
-import User from '../models/User';
-import bcryptjs from 'bcryptjs';
+const User = require('../models/User');
+const bcryptjs = require('bcryptjs');
 
-export const signup = async (req, res) => {
+const signup = async (req, res) => {
   const { username, email, password } = req.body;
 
   if (
@@ -30,3 +30,5 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+module.exports = { signup };

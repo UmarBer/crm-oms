@@ -8,6 +8,7 @@ import CustomerDetails from './Components/CustomerDetails';
 import TemplateManager from './Components/TemplateManager';
 import LandingPage from './Components/LandingPage';
 import Navbar from './Components/Navbar';
+import SignUpPage from './Components/SignUpPage';
 import './App.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/generate-sheet" element={<GenerateSheetForm />} />
             <Route path="/templates" element={<TemplateManager />} />
             <Route path="/landing" element={<LandingPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
           </Routes>
         </div>
       </Router>

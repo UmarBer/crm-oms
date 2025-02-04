@@ -28,6 +28,16 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/auth', authRoutes);
 
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

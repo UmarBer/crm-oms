@@ -9,6 +9,7 @@ import TemplateManager from './Components/TemplateManager';
 import LandingPage from './Components/LandingPage';
 import Navbar from './Components/Navbar';
 import SignUpPage from './Components/SignUpPage';
+import Footer from './Components/Footer';
 import './App.css';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
           </Routes>
         </div>
+        <Footer />
       </Router>
     </div>
   );

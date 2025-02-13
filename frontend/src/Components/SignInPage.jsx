@@ -14,13 +14,13 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.email || !formData.password) {
-      setErrorMessage('Please fill out all fields');
+    if (!formData.email || !formData.password) {
+      return setErrorMessage('Please fill out all fields.');
     }
     try {
       setLoading(true);
       setErrorMessage(null);
-      const res = await fetch('/api/auth/signup', {
+      const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -31,7 +31,7 @@ function SignUp() {
       }
       setLoading(false);
       if (res.ok) {
-        navigate('/login');
+        navigate('/');
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -50,23 +50,13 @@ function SignUp() {
                 Welcome to My CRM.
               </span>
               <p className="font-semibold text-lg text-left text-blue-600">
-                You can sign up with your email and password or with Google.
+                You can sign in with your email and password or with Google.
               </p>
             </div>
           </div>
           {/* right */}
           <div className="flex-1 mt-20">
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-              <div className="border-b-2 border-t-2 border-l-2 border-r-2 p-2 rounded-2xl border-blue-500">
-                <label className="border-t-2" value="Your username" />
-                <input
-                  type="text"
-                  placeholder="Username"
-                  id="username"
-                  className="focus:outline-none"
-                  onChange={handleChange}
-                />
-              </div>
               <div className="border-b-2 border-t-2 border-l-2 border-r-2 p-2 rounded-2xl  border-blue-500">
                 <label className="border-t-2" value="Your email" />
                 <input
@@ -80,7 +70,7 @@ function SignUp() {
               <div className="border-b-2 border-t-2 border-l-2 border-r-2 p-2 rounded-2xl  border-blue-500">
                 <label className="border-t-2" value="Your password" />
                 <input
-                  type="text"
+                  type="password"
                   placeholder="Password"
                   id="password"
                   className="focus:outline-none"
@@ -117,15 +107,15 @@ function SignUp() {
                   </div>
                 ) : (
                   <span className="text-white font-bold tracking-widest">
-                    Sign Up
+                    Sign In
                   </span>
                 )}
               </button>
             </form>
             <div className="flex gap-2 text-lg mt-5">
-              <span>Have an account?</span>
-              <a href="/signin" className="text-blue-500">
-                Sign In
+              <span>Don&apos;t have an account?</span>
+              <a href="/signup" className="text-blue-500">
+                Sign Up
               </a>
             </div>
             {errorMessage && (

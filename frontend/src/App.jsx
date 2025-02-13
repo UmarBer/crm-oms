@@ -9,6 +9,7 @@ import TemplateManager from './Components/TemplateManager';
 import LandingPage from './Components/LandingPage';
 import Navbar from './Components/Navbar';
 import SignUpPage from './Components/SignUpPage';
+import SignInPage from './Components/SignInPage';
 import Footer from './Components/Footer';
 import './App.css';
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/templates" element={<TemplateManager />} />
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/signin" element={<SignInPage />} />
           </Routes>
         </div>
         <Footer />

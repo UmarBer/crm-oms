@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import GoogleLoginButton from './GoogleLoginButton';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -46,7 +45,6 @@ const Navbar = () => {
               Get Started
             </button>
             {/* </NavLink> */}
-            <GoogleLoginButton />
           </div>
 
           {/* Mobile Menu Button */}
@@ -132,7 +130,6 @@ const Navbar = () => {
                 Get Started
               </button>
             </NavLink>
-            <GoogleLoginButton />
           </div>
         </div>
       )}

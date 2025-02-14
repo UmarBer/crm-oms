@@ -1,27 +1,29 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
 
   const navLinkClasses = ({ isActive }) =>
     isActive
-      ? 'text-blue-700 font-bold border-b-2 border-blue-700'
-      : 'text-black-500 hover:underline';
+      ? 'text-blue-700 font-bold '
+      : 'text-black-700 font-semibold py-4 hover:underline';
 
   return (
-    <nav className="bg-gradient-to-r from-blue-50 via-white to-blue-50 shadow-md">
+    <nav className="bg-gradient-to-r from-blue-100 via-blue to-blue-200 shadow-md ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center  py-4">
           {/* Logo */}
           <NavLink to="/" className="flex items-center space-x-2">
             <div className="text-2xl font-bold text-black-700">My CRM</div>
           </NavLink>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex space-x-8 items-center">
             <NavLink to="/new-order" className={navLinkClasses}>
               Add New Order
             </NavLink>
@@ -40,9 +42,23 @@ const Navbar = () => {
             {/* <NavLink className={navLinkClasses}> */}
             <button
               onClick={() => navigate('/signup')}
-              className="bg-blue-600 text-white px-4 py-2 font-semibold rounded-lg shadow hover:bg-blue-700 transition duration-200"
+              className={
+                currentUser
+                  ? 'hidden'
+                  : 'text-white font-bold bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800  rounded-lg text-md px-5 py-2 text-center '
+              }
             >
               Get Started
+            </button>
+            <button
+              onClick={() => navigate('/signup')}
+              className={
+                currentUser
+                  ? 'text-white hover:text-white border bg-red-300 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-5  text-center h-8  '
+                  : 'hidden'
+              }
+            >
+              Sign Out
             </button>
             {/* </NavLink> */}
           </div>
@@ -119,15 +135,31 @@ const Navbar = () => {
               Manage WhatsApp Templates
             </NavLink>
             <NavLink
-              to="/landing"
+              to="/signup"
               className={navLinkClasses}
               onClick={() => setIsMenuOpen(false)}
             >
               <button
                 onClick={() => navigate('/signup')}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-200"
+                className={
+                  currentUser
+                    ? 'hidden'
+                    : 'text-white font-bold bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800  rounded-lg text-md px-5 py-2 text-center '
+                }
               >
                 Get Started
+              </button>
+            </NavLink>
+            <NavLink to="/signup" className={navLinkClasses}>
+              <button
+                onClick={() => navigate('/signup')}
+                className={
+                  currentUser
+                    ? 'text-white hover:text-white border bg-red-300 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-5  text-center h-8  '
+                    : 'hidden'
+                }
+              >
+                Sign Out
               </button>
             </NavLink>
           </div>

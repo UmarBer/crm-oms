@@ -51,8 +51,13 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 
 #### **5. User Experience Enhancements**
 - ✅ **Basic Navigation:** Implemented.
-- ❌ Add login and register and hide content if not logged in (Test it)
+- ✅ Add login and register and hide content if not logged in (Test it)
   - Write controller and route for the signup route https://github.com/sahandghavidel/mern-blog/commit/d4aa92eb0e5c502c606eea448a0f2d2cfdcf7f15
+- ❌ Fix all fields required error when logging in with Google
+- ❌ Fix first log in error from signup page
+- ❌ Add option to enter mobile number for Whatsapp Business features
+
+- ❌ Fix footer being too high in some pages
 - ❌ **Mobile Responsiveness:**
   - Ensure the CRM and OMS dashboards work smoothly on mobile devices.
 - ❌ **Improved UI/UX:**

@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signInSuccess } from '../redux/user/userSlice';
 
-function OAuth() {
+// eslint-disable-next-line react/prop-types
+function OAuth({ updateFormData }) {
   const auth = getAuth(app);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -12,25 +13,38 @@ function OAuth() {
   const handleGoogleClick = async () => {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
+
     try {
       const resultsFromGoogle = await signInWithPopup(auth, provider);
+
+      console.log('Google User Data:', resultsFromGoogle.user); // 🔍 Debugging
+
+      const userData = {
+        username: resultsFromGoogle.user.displayName,
+        email: resultsFromGoogle.user.email,
+        googleAuth: true
+      };
+
+      // 🔥 Update the formData state inside SignUp component
+      updateFormData(userData);
+
       const res = await fetch('/api/auth/google', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          name: resultsFromGoogle.user.displayName,
-          email: resultsFromGoogle.user.email
-        })
+        body: JSON.stringify(userData)
       });
+
       const data = await res.json();
+      console.log('Google Auth API Response:', data); // 🔍 Debugging
+
       if (res.ok) {
         dispatch(signInSuccess(data));
         navigate('/');
       }
     } catch (error) {
-      console.log(error);
+      console.error('Google Auth Error:', error); // 🔍 Debugging
     }
   };
 

@@ -43,28 +43,24 @@ const signin = async (req, res, next) => {
 
 // 🛠 Sign Up
 const signup = async (req, res, next) => {
+  const { username, email, password, googleAuth } = req.body;
+
+  // ✅ Allow Google signups without password validation
+  if (!username || !email || (!password && !googleAuth)) {
+    return next(errorHandler(400, 'All fields are required'));
+  }
+
+  const hashedPassword = password ? bcryptjs.hashSync(password, 10) : null;
+
+  const newUser = new User({
+    username,
+    email,
+    password: hashedPassword
+  });
+
   try {
-    const { username, email, password } = req.body;
-
-    // ✅ Validate request body
-    if (!username || !email || !password) {
-      return next(errorHandler(400, 'All fields are required'));
-    }
-
-    // ✅ Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return next(errorHandler(400, 'User already exists'));
-    }
-
-    // ✅ Hash password
-    const hashedPassword = bcryptjs.hashSync(password, 10);
-
-    // ✅ Create and save new user
-    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
-
-    res.status(201).json({ message: 'Signup successful' });
+    res.json({ success: true, message: 'Signup successful' });
   } catch (error) {
     next(error);
   }
@@ -72,27 +68,41 @@ const signup = async (req, res, next) => {
 
 // 🛠 Google Sign In
 const google = async (req, res, next) => {
+  const { name, email, googleAuth } = req.body;
   try {
-    const { name, email } = req.body;
-
-    // ✅ Check if user exists
     let user = await User.findOne({ email });
 
-    if (!user) {
-      // ✅ Generate a random secure password
-      const generatedPassword = crypto.randomBytes(8).toString('hex');
-      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+    if (user) {
+      // ✅ If user already exists, generate a token
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: '7d'
+      });
 
-      // ✅ Create new user with Google credentials
-      user = new User({ username: name, email, password: hashedPassword });
-      await user.save();
+      const { password, ...rest } = user._doc;
+      return res
+        .status(200)
+        .cookie('access_token', token, { httpOnly: true })
+        .json(rest);
     }
 
-    // ✅ Generate JWT token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    // ✅ If user does NOT exist, create one
+    const generatedPassword = crypto.randomBytes(8).toString('hex');
+    const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
 
-    // ✅ Remove password from response
-    const { password, ...rest } = user._doc;
+    const newUser = new User({
+      username: name,
+      email,
+      password: hashedPassword,
+      googleAuth: true // ✅ Add this flag
+    });
+
+    await newUser.save();
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: '7d'
+    });
+
+    const { password, ...rest } = newUser._doc;
 
     res
       .status(200)
@@ -103,4 +113,15 @@ const google = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, signin, google };
+const signout = (req, res, next) => {
+  try {
+    res
+      .clearCookie('access_token')
+      .status(200)
+      .json({ message: 'Signout successful' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { signup, signin, google, signout };

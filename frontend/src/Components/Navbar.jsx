@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { signoutSuccess } from '../redux/user/userSlice';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
@@ -12,6 +14,23 @@ const Navbar = () => {
     isActive
       ? 'text-blue-700 font-bold '
       : 'text-black-700 font-semibold py-4 hover:underline';
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch('/api/auth/signout', {
+        method: 'POST'
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+        navigate('/');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <nav className="bg-gradient-to-r from-blue-100 via-blue to-blue-200 shadow-md ">
@@ -51,7 +70,7 @@ const Navbar = () => {
               Get Started
             </button>
             <button
-              onClick={() => navigate('/signup')}
+              onClick={handleSignout}
               className={
                 currentUser
                   ? 'text-white hover:text-white border bg-red-300 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-5  text-center h-8  '
@@ -134,34 +153,28 @@ const Navbar = () => {
             >
               Manage WhatsApp Templates
             </NavLink>
-            <NavLink
-              to="/signup"
-              className={navLinkClasses}
-              onClick={() => setIsMenuOpen(false)}
+
+            <button
+              onClick={() => navigate('/signup')}
+              className={
+                currentUser
+                  ? 'hidden'
+                  : 'text-white font-bold bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800  rounded-lg text-md px-5 py-2 text-center '
+              }
             >
-              <button
-                onClick={() => navigate('/signup')}
-                className={
-                  currentUser
-                    ? 'hidden'
-                    : 'text-white font-bold bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800  rounded-lg text-md px-5 py-2 text-center '
-                }
-              >
-                Get Started
-              </button>
-            </NavLink>
-            <NavLink to="/signup" className={navLinkClasses}>
-              <button
-                onClick={() => navigate('/signup')}
-                className={
-                  currentUser
-                    ? 'text-white hover:text-white border bg-red-300 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-5  text-center h-8  '
-                    : 'hidden'
-                }
-              >
-                Sign Out
-              </button>
-            </NavLink>
+              Get Started
+            </button>
+
+            <button
+              onClick={handleSignout}
+              className={
+                currentUser
+                  ? 'text-white hover:text-white border bg-red-300 border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-5  text-center h-8  '
+                  : 'hidden'
+              }
+            >
+              Sign Out
+            </button>
           </div>
         </div>
       )}

@@ -116,7 +116,7 @@ function SignUp() {
                   </span>
                 )}
               </button>
-              <OAuth />
+              <OAuth updateFormData={setFormData} />
             </form>
             <div className="flex gap-2 text-lg mt-5">
               <span>Don&apos;t have an account?</span>

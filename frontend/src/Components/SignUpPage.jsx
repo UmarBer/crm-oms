@@ -15,26 +15,43 @@ function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.username || !formData.email || !formData.password) {
+
+    console.log('Form Data on Submit:', formData); // 🔍 Debugging
+
+    if (
+      !formData.username ||
+      !formData.email ||
+      (!formData.password && !formData.googleAuth)
+    ) {
+      console.log('Validation Failed: Missing fields'); // 🔍 Debugging
       setErrorMessage('Please fill out all fields');
+      return;
     }
+
     try {
       setLoading(true);
       setErrorMessage(null);
+
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
+
       const data = await res.json();
+      console.log('Signup Response:', data); // 🔍 Debugging
+
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        setErrorMessage(data.message);
+        return;
       }
+
       setLoading(false);
       if (res.ok) {
         navigate('/login');
       }
     } catch (error) {
+      console.error('Error in Signup Request:', error); // 🔍 Debugging
       setErrorMessage(error.message);
       setLoading(false);
     }
@@ -122,7 +139,7 @@ function SignUp() {
                   </span>
                 )}
               </button>
-              <OAuth />
+              <OAuth updateFormData={setFormData} />
             </form>
             <div className="flex gap-2 text-lg mt-5">
               <span>Have an account?</span>

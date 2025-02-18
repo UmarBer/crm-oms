@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import { signInSuccess } from '../redux/user/userSlice';
 
 // eslint-disable-next-line react/prop-types
-function OAuth({ updateFormData }) {
+function OAuth({ updateFormData, clearErrorMessage }) {
   const auth = getAuth(app);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleGoogleClick = async () => {
+    clearErrorMessage();
+
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
 

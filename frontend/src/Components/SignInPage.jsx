@@ -10,6 +10,7 @@ import OAuth from './OAuth';
 
 function SignUp() {
   const [formData, setFormData] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -22,7 +23,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      return dispatch(signInFailure('Please fill out all fields.'));
+      return dispatch(signInFailure());
     }
     try {
       dispatch(signInStart());
@@ -124,9 +125,9 @@ function SignUp() {
                 Sign Up
               </a>
             </div>
-            {errorMessage && (
+            {/* {errorMessage && (
               <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OAuth from './OAuth';
 
@@ -6,8 +6,15 @@ function SignUp() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const isGoogleAuth = useRef(false);
 
   const navigate = useNavigate();
+
+  const clearErrorMessage = () => {
+    setErrorMessage(null);
+    isGoogleAuth.current = true;
+    console.log('isGoogleAuth:', isGoogleAuth.current); // 🔍 Debugging
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -16,44 +23,41 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('Form Data on Submit:', formData); // 🔍 Debugging
-
-    if (
-      !formData.username ||
-      !formData.email ||
-      (!formData.password && !formData.googleAuth)
-    ) {
-      console.log('Validation Failed: Missing fields'); // 🔍 Debugging
-      setErrorMessage('Please fill out all fields');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setErrorMessage(null);
-
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await res.json();
-      console.log('Signup Response:', data); // 🔍 Debugging
-
-      if (data.success === false) {
-        setErrorMessage(data.message);
+    if (!isGoogleAuth.current) {
+      if (!formData.username || !formData.email || !formData.password) {
+        setErrorMessage('Please fill out all fields');
         return;
       }
 
-      setLoading(false);
-      if (res.ok) {
-        navigate('/login');
+      console.log('Form Data on Submit:', formData); // 🔍 Debugging
+
+      try {
+        setLoading(true);
+        setErrorMessage(null);
+
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+        console.log('Signup Response:', data); // 🔍 Debugging
+
+        if (data.success === false) {
+          setErrorMessage(data.message);
+          return;
+        }
+
+        setLoading(false);
+        if (res.ok) {
+          navigate('/signin');
+        }
+      } catch (error) {
+        console.error('Error in Signup Request:', error); // 🔍 Debugging
+        setErrorMessage(error.message);
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error in Signup Request:', error); // 🔍 Debugging
-      setErrorMessage(error.message);
-      setLoading(false);
     }
   };
 
@@ -98,7 +102,7 @@ function SignUp() {
               <div className="border-b-2 border-t-2 border-l-2 border-r-2 p-2 rounded-2xl  border-blue-500">
                 <label className="border-t-2" value="Your password" />
                 <input
-                  type="text"
+                  type="password"
                   placeholder="Password"
                   id="password"
                   className="focus:outline-none"
@@ -139,7 +143,10 @@ function SignUp() {
                   </span>
                 )}
               </button>
-              <OAuth updateFormData={setFormData} />
+              <OAuth
+                updateFormData={setFormData}
+                clearErrorMessage={clearErrorMessage}
+              />
             </form>
             <div className="flex gap-2 text-lg mt-5">
               <span>Have an account?</span>

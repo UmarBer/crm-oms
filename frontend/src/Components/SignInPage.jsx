@@ -15,13 +15,16 @@ function SignUp() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-
+  const clearErrorMessage = () => {
+    dispatch(signInFailure(null));
+  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!formData.email || !formData.password) {
       return dispatch(signInFailure());
     }
@@ -117,7 +120,10 @@ function SignUp() {
                   </span>
                 )}
               </button>
-              <OAuth updateFormData={setFormData} />
+              <OAuth
+                updateFormData={setFormData}
+                clearErrorMessage={clearErrorMessage}
+              />
             </form>
             <div className="flex gap-2 text-lg mt-5">
               <span>Don&apos;t have an account?</span>
@@ -125,9 +131,9 @@ function SignUp() {
                 Sign Up
               </a>
             </div>
-            {/* {errorMessage && (
+            {errorMessage && (
               <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
-            )} */}
+            )}
           </div>
         </div>
       </div>

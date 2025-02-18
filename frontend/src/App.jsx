@@ -16,7 +16,7 @@ import './App.css';
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col justify-between bg-neutral-100">
       <Router>
         <Navbar />
         <div>

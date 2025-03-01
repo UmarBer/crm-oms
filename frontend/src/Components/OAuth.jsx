@@ -19,8 +19,6 @@ function OAuth({ updateFormData, clearErrorMessage }) {
     try {
       const resultsFromGoogle = await signInWithPopup(auth, provider);
 
-      console.log('Google User Data:', resultsFromGoogle.user); // 🔍 Debugging
-
       const userData = {
         username: resultsFromGoogle.user.displayName,
         email: resultsFromGoogle.user.email,
@@ -39,12 +37,16 @@ function OAuth({ updateFormData, clearErrorMessage }) {
       });
 
       const data = await res.json();
-      console.log('Google Auth API Response:', data); // 🔍 Debugging
 
       if (res.ok) {
-        dispatch(signInSuccess(data));
-        navigate('/');
+        if (data.token) {
+          localStorage.setItem('token', data.token); // ✅ Store token in localStorage
+        } else {
+          console.warn('No token received');
+        }
       }
+      dispatch(signInSuccess(data));
+      navigate('/'); // ✅ Redirect user after successful login
     } catch (error) {
       console.error('Google Auth Error:', error); // 🔍 Debugging
     }

@@ -57,7 +57,7 @@ Here’s what you need to implement to create a **decent MVP** for your **CRM-OM
 - ✅ Fix first log in error from signup page
 - ❌ Add option to enter mobile number for Whatsapp Business features
 
-- ❌ Fix footer being too high in some pages
+- ✅ Fix footer being too high in some pages
 - ❌ **Mobile Responsiveness:**
   - Ensure the CRM and OMS dashboards work smoothly on mobile devices.
 - ❌ **Improved UI/UX:**

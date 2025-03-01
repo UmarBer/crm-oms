@@ -8,7 +8,7 @@ import {
 } from '../redux/user/userSlice';
 import OAuth from './OAuth';
 
-function SignUp() {
+function SignIn() {
   const [formData, setFormData] = useState({});
   // eslint-disable-next-line no-unused-vars
   const { loading, error: errorMessage } = useSelector((state) => state.user);
@@ -33,17 +33,26 @@ function SignUp() {
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        credentials: 'include'
       });
       const data = await res.json();
-      if (data.success === false) {
-        dispatch(signInFailure(data.message));
+      if (!res.ok || data.success === false) {
+        return dispatch(signInFailure(data.message || 'Login failed'));
       }
-      if (res.ok) {
-        dispatch(signInSuccess(data));
-        navigate('/');
+
+      console.log('Login Response:', data); // ✅ Debugging log
+
+      if (data.token) {
+        localStorage.setItem('token', data.token); // ✅ Store token in localStorage
+      } else {
+        console.warn('No token received');
       }
+
+      dispatch(signInSuccess(data));
+      navigate('/'); // ✅ Redirect user after successful login
     } catch (error) {
+      console.error('Login Error:', error);
       dispatch(signInFailure(error.message));
     }
   };
@@ -141,4 +150,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignIn;

@@ -13,10 +13,28 @@ function CustomerAnalytics() {
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem('token'); // ✅ Get token from localStorage
       const [customersRes, tagsRes, productRes] = await Promise.all([
-        fetch(`${API_BASE_URL}/api/customers/analytics/count`),
-        fetch(`${API_BASE_URL}/api/customers/analytics/tags`),
-        fetch(`${API_BASE_URL}/api/orders/analytics/most-ordered-product`)
+        fetch(`${API_BASE_URL}/api/customers/analytics/count`, {
+          method: 'GET',
+          credentials: 'include' // 🔥 Ensures cookies (JWT token) are sent with the request
+        }),
+        fetch(`${API_BASE_URL}/api/customers/analytics/tags`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // ✅ Attach token
+          },
+          credentials: 'include'
+        }),
+        fetch(`${API_BASE_URL}/api/orders/analytics/most-ordered-product`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // ✅ Attach token
+          },
+          credentials: 'include'
+        })
       ]);
 
       if (!customersRes.ok || !tagsRes.ok || !productRes.ok) {

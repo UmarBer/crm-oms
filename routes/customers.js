@@ -1,13 +1,18 @@
 const express = require('express');
 const Customer = require('../models/Customer');
-const Order = require('../models/Order'); // Ensure this is imported
+const { authenticateUser } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Analytics Routes
+// ✅ Apply authentication middleware to all routes
+router.use(authenticateUser);
+
+// ✅ Get total customers for the logged-in user
 router.get('/analytics/count', async (req, res) => {
   try {
-    const totalCustomers = await Customer.countDocuments();
+    const totalCustomers = await Customer.countDocuments({
+      userId: req.user.id
+    });
     res.json({ total: totalCustomers });
   } catch (error) {
     console.error('Error fetching customer count:', error);
@@ -15,11 +20,13 @@ router.get('/analytics/count', async (req, res) => {
   }
 });
 
+// ✅ Get tag analytics for the logged-in user
 router.get('/analytics/tags', async (req, res) => {
   try {
     const tagCounts = await Customer.aggregate([
-      { $unwind: '$tags' }, // Flatten the tags array
-      { $group: { _id: '$tags', count: { $sum: 1 } } } // Count customers per tag
+      { $match: { userId: req.user.id } }, // Only fetch data for the logged-in user
+      { $unwind: '$tags' },
+      { $group: { _id: '$tags', count: { $sum: 1 } } }
     ]);
     res.json(tagCounts);
   } catch (error) {
@@ -28,11 +35,11 @@ router.get('/analytics/tags', async (req, res) => {
   }
 });
 
-// Get all customers
+// ✅ Get all customers for the logged-in user
 router.get('/', async (req, res) => {
   const { search, tags } = req.query;
   try {
-    let query = {};
+    let query = { userId: req.user.id }; // Ensure only the logged-in user's customers are fetched
 
     if (search) {
       const searchRegex = new RegExp(search, 'i');
@@ -57,12 +64,12 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get a specific customer by ID
+// ✅ Get a specific customer by ID for the logged-in user
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const customer = await Customer.findById(id);
+    const customer = await Customer.findOne({ _id: id, userId: req.user.id });
     if (!customer) {
       return res.status(404).json({ message: 'Customer not found' });
     }
@@ -73,22 +80,66 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Update a customer
+// ✅ Create a new customer for the logged-in user
+router.post('/', async (req, res) => {
+  try {
+    console.log('Received customer data:', req.body);
+
+    const { name, email, phone, address, notes, tags } = req.body;
+    const userId = req.user?.id; // Ensure the user is correctly extracted
+    console.log('User ID:', userId);
+
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ message: 'Unauthorized. No user ID found' });
+    }
+
+    // ✅ Check if a customer with the same email already exists for this user
+    const existingCustomer = await Customer.findOne({ email, user: userId });
+
+    if (existingCustomer) {
+      return res
+        .status(400)
+        .json({ message: 'A customer with this email already exists' });
+    }
+
+    // ✅ Create a new customer linked to the logged-in user
+    const customer = new Customer({
+      name,
+      email,
+      phone,
+      address,
+      notes,
+      tags: tags || [],
+      userId
+    });
+
+    await customer.save();
+    res.status(201).json(customer);
+  } catch (error) {
+    console.error('❌ Error creating customer:', error);
+
+    // ✅ Handle duplicate email error from MongoDB
+    if (error.code === 11000) {
+      return res
+        .status(400)
+        .json({ message: 'Customer with this email already exists' });
+    }
+
+    res.status(500).json({ message: 'Failed to create customer', error });
+  }
+});
+
+// ✅ Update a customer for the logged-in user
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { name, email, phone, address, notes, tags } = req.body;
 
   try {
-    const updatedCustomer = await Customer.findByIdAndUpdate(
-      id,
-      {
-        name,
-        email,
-        phone,
-        address,
-        notes,
-        tags: tags || []
-      },
+    const updatedCustomer = await Customer.findOneAndUpdate(
+      { _id: id, userId: req.user.id },
+      { name, email, phone, address, notes, tags: tags || [] },
       { new: true }
     );
 
@@ -103,12 +154,15 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Delete a customer
+// ✅ Delete a customer for the logged-in user
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const customer = await Customer.findByIdAndDelete(id);
+    const customer = await Customer.findOneAndDelete({
+      _id: id,
+      userId: req.user.id
+    });
     if (!customer) {
       return res.status(404).json({ message: 'Customer not found' });
     }

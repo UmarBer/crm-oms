@@ -12,7 +12,13 @@ require('dotenv').config();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // Replace with your frontend URL
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'] // Ensure Authorization is not blocked
+  })
+);
 app.use(express.json());
 
 const mongoUri = process.env.MONGO_URI;

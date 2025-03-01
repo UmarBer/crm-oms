@@ -14,17 +14,30 @@ function CustomerDashboard() {
 
   const fetchCustomers = async () => {
     try {
-      // Combine search term and tags into query parameters
-      const queryParams = new URLSearchParams({
-        search: searchTerm
-      });
+      // Construct query parameters dynamically
+      const queryParams = new URLSearchParams();
+      if (searchTerm) queryParams.append('search', searchTerm);
+      const token = localStorage.getItem('token');
+
       const response = await fetch(
-        `${API_BASE_URL}/api/customers?${queryParams}` //search=${encodeURIComponent(search)
+        `${API_BASE_URL}/api/customers?${queryParams.toString()}`,
+        {
+          method: 'GET',
+          credentials: 'include', // Ensures cookies are sent if using cookie-based auth
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // ✅ Attach token
+          }
+        }
       );
+
+      // Check if the response is ok before parsing JSON
+      if (!response.ok) {
+        throw new Error('Failed to fetch customers');
+      }
 
       const data = await response.json();
       setCustomers(data);
-      // console.log('Updated customers state:', data);
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
@@ -48,20 +61,29 @@ function CustomerDashboard() {
 
     const response = await fetch(endpoint, {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}` // Include token
+      },
+      credentials: 'include', // Ensure credentials (cookies) are sent
       body: JSON.stringify(customer)
     });
 
     if (response.ok) {
       setEditingCustomer(null);
-      fetchCustomers();
+      fetchCustomers(); // Refresh customer list
       setIsFormOpen(false);
+    } else {
+      console.error('Failed to save customer:', await response.json());
     }
   };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
-      await fetch(`${API_BASE_URL}/api/customers/${id}`, { method: 'DELETE' });
+      await fetch(`${API_BASE_URL}/api/customers/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
       fetchCustomers();
     }
   };

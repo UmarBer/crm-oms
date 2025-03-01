@@ -19,9 +19,18 @@ function CustomerDetails() {
   useEffect(() => {
     const fetchCustomerAndOrders = async () => {
       try {
+        const token = localStorage.getItem('token');
         // Fetch Customer Details
         const customerResponse = await fetch(
-          `${API_BASE_URL}/api/customers/${id}`
+          `${API_BASE_URL}/api/customers/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}` // ✅ Attach token
+            },
+            credentials: 'include'
+          }
         );
         if (!customerResponse.ok) throw new Error('Failed to fetch customer');
         const customerData = await customerResponse.json();
@@ -29,7 +38,15 @@ function CustomerDetails() {
 
         // Fetch Orders for Customer
         const ordersResponse = await fetch(
-          `${API_BASE_URL}/api/orders?customerId=${id}`
+          `${API_BASE_URL}/api/orders?customerId=${id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}` // ✅ Attach token
+            },
+            credentials: 'include'
+          }
         );
         if (!ordersResponse.ok) throw new Error('Failed to fetch orders');
         const ordersData = await ordersResponse.json();
@@ -58,7 +75,11 @@ function CustomerDetails() {
 
       const response = await fetch(`${API_BASE_URL}/api/customers/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        credentials: 'include',
         body: JSON.stringify(normalizedCustomer)
       });
 

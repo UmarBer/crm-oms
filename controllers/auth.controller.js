@@ -27,15 +27,17 @@ const signin = async (req, res, next) => {
     }
 
     // ✅ Generate JWT token
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
+      expiresIn: '7d' // Token expiration
+    });
 
     // ✅ Remove password field from response
     const { password: pass, ...rest } = validUser._doc;
 
     res
       .status(200)
-      .cookie('access_token', token, { httpOnly: true })
-      .json(rest);
+      .cookie('access_token', token, { httpOnly: true, secure: false })
+      .json({ token, user: rest });
   } catch (error) {
     next(error);
   }
@@ -75,14 +77,14 @@ const google = async (req, res, next) => {
     if (user) {
       // ✅ If user already exists, generate a token
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: '7d'
+        expiresIn: '7d' // Token expiration
       });
 
       const { password, ...rest } = user._doc;
       return res
         .status(200)
-        .cookie('access_token', token, { httpOnly: true })
-        .json(rest);
+        .cookie('access_token', token, { httpOnly: true, secure: false })
+        .json({ token, user: rest });
     }
 
     // ✅ If user does NOT exist, create one

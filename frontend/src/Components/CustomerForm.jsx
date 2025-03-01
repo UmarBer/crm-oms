@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types'; // Import PropTypes
+import PropTypes from 'prop-types';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CustomerForm({ onSubmit, initialData = {}, isEditing = false }) {
   const [name, setName] = useState(initialData.name || '');
@@ -7,19 +9,66 @@ function CustomerForm({ onSubmit, initialData = {}, isEditing = false }) {
   const [phone, setPhone] = useState(initialData.phone || '');
   const [address, setAddress] = useState(initialData.address || '');
   const [notes, setNotes] = useState(initialData.notes || '');
-  const [tags, setTags] = useState(initialData.tags || '');
+  const [tags, setTags] = useState(initialData.tags?.join(', ') || ''); // Convert array to string
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({ name, email, phone, address, notes, tags });
-    // Reset the form fields if not editing
-    if (!isEditing) {
-      setName('');
-      setEmail('');
-      setPhone('');
-      setAddress('');
-      setNotes('');
-      setTags('');
+    setError(null);
+    setLoading(true);
+
+    const customerData = {
+      name,
+      email,
+      phone,
+      address,
+      notes,
+      tags: tags.split(',').map((tag) => tag.trim()) // Convert string to array
+    };
+
+    const method = isEditing ? 'PUT' : 'POST';
+    const endpoint = isEditing
+      ? `${API_BASE_URL}/api/customers/${initialData._id}`
+      : `${API_BASE_URL}/api/customers`;
+
+    const token = localStorage.getItem('token');
+
+    const requestOptions = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}) // Ensure Authorization is included only if token exists
+      },
+      credentials: 'include', // Ensure cookies & headers are sent
+      body: JSON.stringify(customerData)
+    };
+
+    console.log('🚀 Sending Request To:', endpoint);
+    console.log('📦 Payload:', customerData);
+    console.log('🔑 Token:', token);
+    console.log('📩 Headers:', requestOptions.headers);
+
+    try {
+      const response = await fetch(endpoint, requestOptions);
+
+      console.log('🛠 Response Status:', response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('❌ Server Error:', errorData);
+        throw new Error('Failed to save customer');
+      }
+
+      const result = await response.json();
+      console.log('✅ Response Data:', result);
+      onSubmit(result); // Callback to refresh customer list
+    } catch (error) {
+      console.error('❌ Error saving customer:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,6 +80,9 @@ function CustomerForm({ onSubmit, initialData = {}, isEditing = false }) {
       <h2 className="text-xl font-semibold mb-4">
         {isEditing ? 'Edit Customer' : 'Add New Customer'}
       </h2>
+
+      {error && <p className="text-red-500">{error}</p>}
+
       <div className="mb-4">
         <label className="block text-gray-700">Name</label>
         <input
@@ -41,6 +93,7 @@ function CustomerForm({ onSubmit, initialData = {}, isEditing = false }) {
           required
         />
       </div>
+
       <div className="mb-4">
         <label className="block text-gray-700">Email</label>
         <input
@@ -51,6 +104,7 @@ function CustomerForm({ onSubmit, initialData = {}, isEditing = false }) {
           required
         />
       </div>
+
       <div className="mb-4">
         <label className="block text-gray-700">Phone</label>
         <input
@@ -60,6 +114,7 @@ function CustomerForm({ onSubmit, initialData = {}, isEditing = false }) {
           className="w-full border p-2 rounded"
         />
       </div>
+
       <div className="mb-4">
         <label className="block text-gray-700">Address</label>
         <textarea
@@ -68,6 +123,7 @@ function CustomerForm({ onSubmit, initialData = {}, isEditing = false }) {
           className="w-full border p-2 rounded"
         />
       </div>
+
       <div className="mb-4">
         <label className="block text-gray-700">Notes</label>
         <textarea
@@ -76,26 +132,29 @@ function CustomerForm({ onSubmit, initialData = {}, isEditing = false }) {
           className="w-full border p-2 rounded"
         />
       </div>
+
       <div className="mb-4">
-        <label className="block text-gray-700">Tag</label>
+        <label className="block text-gray-700">Tags (comma-separated)</label>
         <input
           type="text"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
           className="w-full border p-2 rounded"
+          placeholder="e.g., VIP, Wholesale"
         />
       </div>
+
       <button
         type="submit"
         className="bg-blue-500 text-white px-4 py-2 rounded"
+        disabled={loading}
       >
-        {isEditing ? 'Update Customer' : 'Add Customer'}
+        {loading ? 'Saving...' : isEditing ? 'Update Customer' : 'Add Customer'}
       </button>
     </form>
   );
 }
 
-// Define prop types
 CustomerForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   initialData: PropTypes.object,
